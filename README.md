@@ -147,7 +147,7 @@ route add -net 192.168.4.0 netmask 255.255.255.0 gw 192.168.5.2
 route add -net 192.168.0.0 netmask 255.255.254.0 gw 192.168.2.2
 ```
 
-Buka konfigurasi interface dengan perintah nano /etc/default/isc-dhcp-server. Kemudian, install DHCP Server pada MOJOKERTO dengan perintah ```apt-get install isc-dhcp-server```
+Buka konfigurasi interface dengan perintah ```nano /etc/default/isc-dhcp-server```. Kemudian, install DHCP Server pada MOJOKERTO dengan perintah ```apt-get install isc-dhcp-server```
 
 Pada KEDIRI dan BATU, install DHCP Relay dengan ```apt-get install isc-dhcp-relay```. Lalu, masukkan IP DHCP server MOJOKERTO (10.151.73.35). Selanjutnya, kosongkan kolom interface untuk auto configure.
 
