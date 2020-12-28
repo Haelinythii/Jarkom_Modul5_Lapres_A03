@@ -169,6 +169,8 @@ Menambahkan iptables pada SURABAYA :
 iptables -t nat -A POSTROUTING -s 192.168.0.0/16 -o eth0 -j SNAT --to-source 10.151.72.18
 ```
 
+Untuk melakukan test, maka kita bisa melakukan ping ke luar, contohnya google di semua UML yang ada. Jika sudah berhasil, maka akan muncul seperti contoh digambar sebagian UML ini:
+
 ![no1](img/no1.png)
 
 ## Nomor 2
@@ -179,6 +181,8 @@ Menambahkan iptables pada SURABAYA :
 iptables -A FORWARD -p tcp --dport 22 -d 10.151.73.32/29 -i eth0 -j DROP
 ```
 
+Untuk melakukan test, kita bisa melakukan netcat, yaitu melakukan listen pada malang dengan `nc -l -p 22` dan mengirim paket dengan port 22 melalui putty yang ada diluar topologi dengan `nc 10.151.73.34 22`. Maka akan terjadi seperti gambar dibawah:
+
 ![no2](img/no2.png)
 
 ## Nomor 3
@@ -188,6 +192,8 @@ Menambahkan iptables pada MALANG & MOJOKERTO :
 ```
 iptables -A INPUT -p icmp -m connlimit --connlimit-above 3 --connlimit-mask 0 -j DROP
 ```
+
+Untuk melakukan test, kita bisa melakukan ping dari UML lain ke malang atau mojokerto. Jika sudah berhasil, maka UML ke 4 yang ingin melakukan ping ke malang/mojokerto akan di drop, seperti pada UML probolinggo pada gambar dibawah.
 
 ![no3](img/no3.png)
 
@@ -202,6 +208,9 @@ iptables -A INPUT -s 192.168.0.0/24 -m time --timestart 00:00 --timestop 07:00 -
 iptables -A INPUT -s 192.168.4.0/24 -j REJECT
 iptables -A INPUT -s 192.168.0.0/24 -j REJECT
 ```
+
+Untuk melakukan test, kita bisa ping malang dari gresik atau sidoarjo dan mengganti tanggal nya sesuai dengan soal untuk mengetahui apakah berhasil. Maka hasilnya akan menjadi seperti gambar berikut:
+
 ![no4](img/no4.png)
 ![no5](img/no5.png)
 
@@ -229,6 +238,9 @@ iptables -A FORWARD -p tcp --dport 22 -d 10.151.73.32/29 -i eth0 -j LOGGING
 iptables -A LOGGING -m limit --limit 2/min -j LOG --log-prefix "PACKET DROP: " --log-level info
 iptables -A LOGGING -j DROP
 ```
+
+Untuk melakukan test, lakukan sama seperti nomor 2, dan sekarang lihat pada UML surabaya akan mengeluarkan log paket yang didrop seperti pada gambar berikut:
+
 ![no7_1](img/no7_1.png)
 
 ### MALANG dan MOJOKERTO (nomor 3):
@@ -239,5 +251,7 @@ iptables -A INPUT -p icmp -m connlimit --connlimit-above 3 --connlimit-mask 0 -j
 iptables -A LOGGING -m limit --limit 2/min -j LOG --log-prefix "PACKET DROP: " --log-level info
 iptables -A LOGGING -j DROP
 ```
+
+Untuk melakukan test, lakukan sama seperti nomor 3, dan sekarang lihat pada UML mojokerto/malang akan mengeluarkan log paket yang didrop seperti pada gambar berikut:
 
 ![no7_2](img/no7_2.png)
