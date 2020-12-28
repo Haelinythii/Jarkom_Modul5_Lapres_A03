@@ -231,7 +231,7 @@ iptables -A LOGGING -j DROP
 ```
 ![no7_1](img/no7_1.png)
 
-## MALANG dan MOJOKERTO (nomor 3):
+### MALANG dan MOJOKERTO (nomor 3):
 
 ```
 iptables -N LOGGING
