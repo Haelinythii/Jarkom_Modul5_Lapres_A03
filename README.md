@@ -31,6 +31,10 @@ xterm -T SIDOARJO -e linux ubd0=SIDOARJO,jarkom umid=SIDOARJO eth0=daemon,,,swit
 xterm -T GRESIK -e linux ubd0=GRESIK,jarkom umid=GRESIK eth0=daemon,,,switch6 mem=96M &
 ```
 
+## SUBNETTING CIDR
+
+![tree](img/tree.png)
+
 Untuk mengatur interface pada setiap uml, kita jalankan command ```nano /etc/networking/interface``` untuk mengedit file. Selanjutnya menambahkan konfigurasi :
 
 ```
@@ -119,6 +123,16 @@ iface eth0 inet static
 address 192.168.1.3
 netmask 255.255.255.248
 gateway 192.168.1.1
+
+SIDOARJO
+------------------------------
+auto eth0
+iface eth0 inet dhcp
+
+GRESIK
+------------------------------
+auto eth0
+iface eth0 inet dhcp
 ```
 
 Setelah itu, lakukan ```service networking restart``` untuk mengaktifkan konfigurasi tersebut. Untuk setiap router, lakukan setting pada sysctl dengan mengedit ```nano /etc/sysctl.conf``` dan hilangkan comment pada ```net.ipv4.ip_forward=1``` dan jalankan command ```sysctl -p``` untuk mengaktifkannya.
@@ -132,6 +146,11 @@ route add -net 10.151.73.32 netmask 255.255.255.248 gw 192.168.5.2
 route add -net 192.168.4.0 netmask 255.255.255.0 gw 192.168.5.2
 route add -net 192.168.0.0 netmask 255.255.254.0 gw 192.168.2.2
 ```
+
+Buka konfigurasi interface dengan perintah nano /etc/default/isc-dhcp-server. Kemudian, install DHCP Server pada MOJOKERTO dengan perintah ```apt-get install isc-dhcp-server```
+
+Pada KEDIRI dan BATU, install DHCP Relay dengan ```apt-get install isc-dhcp-relay```. Lalu, masukkan IP DHCP server MOJOKERTO (10.151.73.35). Selanjutnya, kosongkan kolom interface untuk auto configure.
+
 
 mengedit file ```/etc/dhcp/dhcpd.conf``` menjadi sebagai berikut:
 
@@ -225,6 +244,7 @@ iptables -t nat -A POSTROUTING -p tcp --dport 80 -d 192.168.1.2 -j SNAT --to-sou
 iptables -t nat -A POSTROUTING -p tcp --dport 80 -d 192.168.1.3 -j SNAT --to-source 192.168.1.10
 
 ```
+![no6](img/no6.png)
 
 ## Nomor 7
 
